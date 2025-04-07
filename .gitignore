@@ -1,0 +1,4 @@
+rc.local
+imgs/index.asc
+imgs/*.qcow2
+imgs/virt-local-key*
