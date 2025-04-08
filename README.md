@@ -5,9 +5,9 @@ Build a local virt-builder repo. Good for customising and re-using VM images for
 
 Images are built with a pre-installed common ssh pub-key for root, and a common root password. The ssh key-pair is created during first image-build.
 
-The resulting local virt-builder repo is particularly useful for building virtual test environments for clusters services, where VM disk sizes and ssh keys are pre-configured.
+The resulting local virt-builder repo is particularly useful for building similar VMs for test environments, where VM disk sizes and ssh keys are pre-configured.
 
-This tool is designed for local development and testing only.
+This tool should be used for local development VMs and testing only.
 
 # Getting started
 
@@ -53,24 +53,24 @@ virt-builder --list
 
 ```
 # create a vm image
-virt-builder rocky9virt-20G --format qcow2 --root-password password:virtpassword -o rocky9-base-2G.qcow2
+virt-builder rocky9-20G --format qcow2 --root-password password:virtpassword -o rocky9-20G-test.qcow2
 ```
 
 ```
 # define a vm, using the new image..
-virt-install --name rocky9-base-20G --memory 8192 --noautoconsole --vcpus 6 --disk  rocky9-base-20G.qcow2 --import --os-variant rocky9 --network bridge=virbr0
+virt-install --name rocky9-20G-test --memory 8192 --noautoconsole --vcpus 6 --disk  rocky9-20G-test.qcow2 --import --os-variant rocky9 --network bridge=virbr0
 ```
 
 ## Rocky8 example
 
 ```
 # create a vm image
-virt-builder rocky8virt-20G --format qcow2 --root-password password:virtpassword -o rocky8-base-20G.qcow2
+virt-builder rocky8-20G --format qcow2 --root-password password:virtpassword -o rocky8-20G-test.qcow2
 ```
 
 ```
 # define a vm, using the new image..
-virt-install --name rocky8-base-20G --memory 8192 --noautoconsole --vcpus 6 --disk  rocky8-base-20G.qcow2 --import --os-variant rocky8 --network bridge=virbr0
+virt-install --name rocky8-20G-test --memory 8192 --noautoconsole --vcpus 6 --disk  rocky8-20G-test.qcow2 --import --os-variant rocky8 --network bridge=virbr0
 ```
 
 
@@ -79,10 +79,10 @@ virt-install --name rocky8-base-20G --memory 8192 --noautoconsole --vcpus 6 --di
 
 ```
 # create a vm image
-virt-builder debianbookworm-20G --format qcow2 --root-password password:virtpassword -o debianbookworm-base-20G.qcow2
+virt-builder debian12-20G --format qcow2 --root-password password:virtpassword -o debian12-20G-test.qcow2
 ```
 
 ```
 # define a vm, using the new image..
-virt-install --name debianbookworm-base-20G --memory 8192 --noautoconsole --vcpus 6 --disk  debianbookworm-base-20G.qcow2 --import --os-variant debian12 --network bridge=virbr0
+virt-install --name debian12-20G-test --memory 8192 --noautoconsole --vcpus 6 --disk  debian12-20G-test.qcow2 --import --os-variant debian12 --network bridge=virbr0
 ```

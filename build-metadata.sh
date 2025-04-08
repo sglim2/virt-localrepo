@@ -4,33 +4,40 @@
 # Example image name: rocky9-virt-localrepo-base-30G.qcow2
 
 diskImagePath=${diskImagePath:='imgs'}
+imagePathFull=${imagePathFull:='none'}
 imageName=${imageName:='none'}
+osinfo=${osinfo:='none'}
 
 if [[ ${imageName} == 'none' ]]; then
   echo "Please specify 'imageName'"
   exit 1
 fi
 
-metadataFile="${diskImagePath}/index.asc"
+if [[ ${osinfo} == 'none' ]]; then
+  echo "Please specify 'osinfo'"
+  exit 1
+fi
 
-# Parse base name and size from imageName
-# Example: rocky9-virt-localrepo-base-30G.qcow2
-nameWithoutExt="${imageName%.qcow2}"
-# Extract size suffix (e.g. 30G)
-sizeSuffix=$(echo "$nameWithoutExt" | grep -oE '[0-9]+[GM]')
-# Construct osinfo and [name] block using size
-osShort=$(echo "$nameWithoutExt" | awk -F'-' '{print $1$2}' | tr '[:upper:]' '[:lower:]')
-osinfo="${osShort}-${sizeSuffix}"
+if [[ ${imagePathFull} == 'none' ]]; then
+  echo "Please specify 'imagePathFull'"
+  exit 1
+fi
+
+if [[ ! -d "${diskImagePath}" ]]; then
+  echo "Directory ${diskImagePath} does not exist. Creating it."
+  mkdir -p "${diskImagePath}"
+fi
+
+metadataFile="${diskImagePath}/index.asc"
 
 cat >> "${metadataFile}" <<EOF
 
-[${osinfo}]
+[${imageName}]
 osinfo=${osinfo}
 arch=x86_64
-file=${imageName}
+file=${imagePathFull##*/}
 format=qcow2
-size=$(stat -c%s "${diskImagePath}/${imageName}")
-compressed_size=$(du -b "${diskImagePath}/${imageName}" | awk '{print $1}')
-expand=/dev/sda3
+size=$(stat -c%s "${imagePathFull}")
+compressed_size=$(du -b "${imagePathFull}" | awk '{print $1}')
 notes=Built on $(date +%Y-%m-%d)
 EOF
