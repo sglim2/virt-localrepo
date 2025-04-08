@@ -4,6 +4,7 @@
 #
 # Example usage:
 #   imageName='rocky9-virt-localrepo-base.qcow2' \
+#   osinfo='rocky9' \
 #   cloudImageURL='https://download.rockylinux.org/pub/rocky/9/images/x86_64/Rocky-9-GenericCloud-Base.latest.x86_64.qcow2' \
 #   imageSize=30G \
 #   bash generic-rocky.sh
