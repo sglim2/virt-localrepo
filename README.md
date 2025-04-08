@@ -5,7 +5,7 @@ Build a local virt-builder repo. Good for customising and re-using VM images for
 
 Images are built with a pre-installed common ssh pub-key for root, and a common root password. The ssh key-pair is created during first image-build.
 
-The resulting local virt-builder repo is particularly useful for building similar VMs for test environments, where VM disk sizes and ssh keys are pre-configured.
+The resulting local virt-builder repo is particularly useful for building similar VMs for test environments where ssh keys are pre-configured.
 
 This tool should be used for local development VMs and testing only.
 
@@ -13,14 +13,14 @@ This tool should be used for local development VMs and testing only.
 
 Clone the virt-localrepo repository into your working directory:
 
-```
+```bash
 git clone http://github.com/sglim2/virt-localrepo.git
 cd virt-localrepo
 ```
 
 Add a local virt-builder repository to config file:
 
-```   
+```bash
 mkdir -p ~/.config/virt-builder/repos.d/
 cat >~/.config/virt-builder/repos.d/virt-localrepo.conf <<EOF 
 [virt-localrepo]
@@ -33,7 +33,7 @@ The repo ```index.asc``` file will be created/appended after building the images
 
 To build a typical list of images, a wrapper script is provided:
 
-```
+```bash
 #virt-builder --delete-cache # optional
 bash ./build-generics.sh
 ```
@@ -44,45 +44,37 @@ This will build a set of images, and create the index.asc file.
 
 A common ssh key is created and injected into the created images.
 
-```
+```bash
 # list images
 virt-builder --list
 ```
 
 ## Rocky9 example
 
-```
+```bash
 # create a vm image
-virt-builder rocky9-20G --format qcow2 --root-password password:virtpassword -o rocky9-20G-test.qcow2
-```
-
-```
+virt-builder rocky9 --format qcow2 --root-password password:virtpassword --size=30G -o rocky9-test.qcow2
 # define a vm, using the new image..
-virt-install --name rocky9-20G-test --memory 8192 --noautoconsole --vcpus 6 --disk  rocky9-20G-test.qcow2 --import --os-variant rocky9 --network bridge=virbr0
+virt-install --name rocky9-test --memory 8192 --noautoconsole --vcpus 6 --disk  rocky9-test.qcow2 --import --os-variant rocky9 --network bridge=virbr0
 ```
 
 ## Rocky8 example
 
-```
+```bash
 # create a vm image
-virt-builder rocky8-20G --format qcow2 --root-password password:virtpassword -o rocky8-20G-test.qcow2
-```
-
-```
+virt-builder rocky8 --format qcow2 --root-password password:virtpassword --size=30G -o rocky8-test.qcow2
 # define a vm, using the new image..
-virt-install --name rocky8-20G-test --memory 8192 --noautoconsole --vcpus 6 --disk  rocky8-20G-test.qcow2 --import --os-variant rocky8 --network bridge=virbr0
+virt-install --name rocky8-test --memory 8192 --noautoconsole --vcpus 6 --disk  rocky8-test.qcow2 --import --os-variant rocky8 --network bridge=virbr0
 ```
 
 
 
 ## Debian12 example
 
-```
+```bash
 # create a vm image
-virt-builder debian12-20G --format qcow2 --root-password password:virtpassword -o debian12-20G-test.qcow2
+virt-builder debian12 --format qcow2 --root-password password:virtpassword --size=30G -o debian12-test.qcow2
+# define a vm, using the new image..
+virt-install --name debian12-test --memory 8192 --noautoconsole --vcpus 6 --disk  debian12-test.qcow2 --import --os-variant debian12 --network bridge=virbr0
 ```
 
-```
-# define a vm, using the new image..
-virt-install --name debian12-20G-test --memory 8192 --noautoconsole --vcpus 6 --disk  debian12-20G-test.qcow2 --import --os-variant debian12 --network bridge=virbr0
-```
