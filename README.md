@@ -78,3 +78,22 @@ virt-builder debian12 --format qcow2 --root-password password:virtpassword --siz
 virt-install --name debian12-test --memory 8192 --noautoconsole --vcpus 6 --disk  debian12-test.qcow2 --import --os-variant debian12 --network bridge=virbr0
 ```
 
+
+# Connecting via ssh
+
+An ssh key-pair is created during the first image build. The same public key is injected into all subsequent image. Use this key for a handy ssh connection to the images, e.g. add the following to your ssh config file (assuming your libvirt bridge is on the network 192.168.122.1/24):
+
+```bash
+cat >>~/.ssh/config  <<EOF
+
+Host 192.168.122.*
+    User root
+    IdentityFile ${PWD}/imgs/virt-local-key
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+    Identitiesonly yes
+
+EOF
+
+
+```
