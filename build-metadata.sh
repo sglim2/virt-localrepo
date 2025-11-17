@@ -8,34 +8,34 @@ imagePathFull=${imagePathFull:='none'}
 osinfo=${osinfo:='none'}
 
 if [[ ${osinfo} == 'none' ]]; then
-  echo "❌ Please specify 'osinfo'"
+  echo "Please specify 'osinfo'"
   exit 1
 fi
 
 if [[ ${imagePathFull} == 'none' ]]; then
-  echo "❌ Please specify 'imagePathFull'"
+  echo "Please specify 'imagePathFull'"
   exit 1
 fi
 
 if [[ ! -d "${diskImagePath}" ]]; then
-  echo "📁 Directory ${diskImagePath} does not exist. Creating it."
+  echo "Directory ${diskImagePath} does not exist. Creating it."
   mkdir -p "${diskImagePath}"
 fi
 
 metadataFile="${diskImagePath}/index.asc"
 
 # Detect root partition using virt-inspector
-echo "🔍 Probing root filesystem partition..."
+echo "Probing root filesystem partition..."
 root_partition=$(virt-inspector --format=qcow2 --no-applications -a "${imagePathFull}" | xmllint --xpath 'string(//mountpoint[text()="/"]/@dev)' -)
 
 if [[ -z "$root_partition" ]]; then
-  echo "⚠️ Warning: Could not determine root partition. 'expand=' entry will be omitted."
+  echo "Warning: Could not determine root partition. 'expand=' entry will be omitted."
 else
-  echo "✅ Root partition detected: $root_partition"
+  echo "Root partition detected: $root_partition"
 fi
 
 # Append metadata block
-echo "📝 Writing metadata for ${osinfo}..."
+echo "Writing metadata for ${osinfo}..."
 
 cat >> "${metadataFile}" <<EOF
 

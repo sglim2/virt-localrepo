@@ -14,21 +14,21 @@ cloudImageURL=${cloudImageURL:='none'}
 imageName="${osinfo}.qcow2"
 
 if [[ $cloudImageURL == 'none' ]]; then
-  echo "❌ Please specify 'cloudImageURL'"
+  echo "Please specify 'cloudImageURL'"
   exit 1
 fi
 
 if [[ $osinfo == 'none' ]]; then
-  echo "❌ Please specify 'osinfo'"
+  echo "Please specify 'osinfo'"
   exit 1
 fi
 
 imagePathFull="${diskImagePath}/${imageName}"
 
-echo "🔐 Checking for SSH keys..."
+echo "Checking for SSH keys..."
 [ -f ${diskImagePath}/virt-local-key ] || ssh-keygen -C "virt-local" -t rsa -b 2048 -N "" -f ${diskImagePath}/virt-local-key
 
-echo "🌐 Checking/Downloading official image..."
+echo "Checking/Downloading official image..."
 if [[ ! -f "${imagePathFull}" ]]; then
   # Download cloud image if not already downloaded
   cloudImageFile="${diskImagePath}/${cloudImageURL##*/}"
@@ -37,11 +37,11 @@ if [[ ! -f "${imagePathFull}" ]]; then
   fi
 
   # Copy the image
-  echo "🧱 Creating image '${imageName}'..."
+  echo "Creating image '${imageName}'..."
   cp -a --sparse=always "$cloudImageFile" "$imagePathFull"
 
   # Inject SSH key
-  echo "🔑 Injecting SSH key and SELinux relabel..."
+  echo "Injecting SSH key and SELinux relabel..."
   virt-customize -a "$imagePathFull" --ssh-inject root:file:${diskImagePath}/virt-local-key.pub
   virt-customize -a "$imagePathFull" --selinux-relabel
   virt-customize -a "$imagePathFull" --run-command 'mkdir -p /root/.ssh && chmod 700 /root/.ssh'
@@ -49,9 +49,9 @@ if [[ ! -f "${imagePathFull}" ]]; then
   virt-customize -a "$imagePathFull" --run-command 'mv /root/.ssh/virt-local-key /root/.ssh/id_rsa && chmod 600 /root/.ssh/id_rsa'
 
   # Generate the virt-builder metadata
-  echo "🛠  Generating virt-builder metadata..."
+  echo "Generating virt-builder metadata..."
   osinfo="${osinfo}" diskImagePath="${diskImagePath}" imagePathFull="${imagePathFull}" bash build-metadata.sh
 else
-  echo "✅ Image ${imagePathFull} already exists. Skipping creation."
+  echo "Image ${imagePathFull} already exists. Skipping creation."
 fi
 
