@@ -14,7 +14,7 @@ This tool should be used for local development VMs and testing only.
 Clone the virt-localrepo repository into your working directory:
 
 ```bash
-git clone http://github.com/sglim2/virt-localrepo.git
+git clone git@github.com:sglim2/virt-localrepo.git
 cd virt-localrepo
 ```
 
